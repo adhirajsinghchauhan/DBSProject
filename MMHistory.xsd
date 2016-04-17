@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MMHistory" targetNamespace="http://tempuri.org/MMHistory.xsd" xmlns:mstns="http://tempuri.org/MMHistory.xsd" xmlns="http://tempuri.org/MMHistory.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+        </Connections>
+        <Tables>
+        </Tables>
+        <Sources>
+        </Sources>
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="MMHistory" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Genreator_DataSetName="MMHistory" msprop:Generator_DataSetName="MMHistory" msprop:Genreator_UserDSName="MMHistory" msprop:Generator_UserDSName="MMHistory">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Music" msprop:Genreator_TableClassName="MusicDataTable" msprop:Generator_TableClassName="MusicDataTable" msprop:Generator_RowDeletedName="MusicRowDeleted" msprop:Genreator_RowEvArgName="MusicRowChangeEvent" msprop:Generator_TableVarName="tableMusic" msprop:Generator_RowEvHandlerName="MusicRowChangeEventHandler" msprop:Generator_RowDeletingName="MusicRowDeleting" msprop:Generator_TablePropName="Music" msprop:Generator_RowEvArgName="MusicRowChangeEvent" msprop:Genreator_RowDeletingName="MusicRowDeleting" msprop:Genreator_RowEvHandlerName="MusicRowChangeEventHandler" msprop:Genreator_RowChangingName="MusicRowChanging" msprop:Genreator_RowChangedName="MusicRowChanged" msprop:Genreator_TablePropName="Music" msprop:Genreator_TableVarName="tableMusic" msprop:Genreator_RowClassName="MusicRow" msprop:Genreator_UserTableName="Music" msprop:Generator_RowChangedName="MusicRowChanged" msprop:Generator_UserTableName="Music" msprop:Genreator_RowDeletedName="MusicRowDeleted" msprop:Generator_RowClassName="MusicRow" msprop:Generator_RowChangingName="MusicRowChanging">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ID" msdata:AutoIncrement="true" msprop:Genreator_ColumnVarNameInTable="columnID" msprop:Genreator_ColumnPropNameInTable="IDColumn" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Genreator_UserColumnName="ID" msprop:Genreator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" minOccurs="0" />
+              <xs:element name="FullFilename" msprop:Genreator_ColumnVarNameInTable="columnFullFilename" msprop:Genreator_ColumnPropNameInTable="FullFilenameColumn" msprop:Generator_ColumnVarNameInTable="columnFullFilename" msprop:Genreator_UserColumnName="FullFilename" msprop:Genreator_ColumnPropNameInRow="FullFilename" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="FullFilename" msprop:Generator_ColumnPropNameInTable="FullFilenameColumn" msprop:Generator_UserColumnName="FullFilename" type="xs:string" />
+              <xs:element name="Filename" msprop:Genreator_ColumnVarNameInTable="columnFilename" msprop:Genreator_ColumnPropNameInTable="FilenameColumn" msprop:Generator_ColumnVarNameInTable="columnFilename" msprop:Genreator_UserColumnName="Filename" msprop:Genreator_ColumnPropNameInRow="Filename" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="Filename" msprop:Generator_ColumnPropNameInTable="FilenameColumn" msprop:Generator_UserColumnName="Filename" type="xs:string" />
+              <xs:element name="Title" msprop:Genreator_ColumnVarNameInTable="columnTitle" msprop:Genreator_ColumnPropNameInTable="TitleColumn" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Genreator_UserColumnName="Title" msprop:Genreator_ColumnPropNameInRow="Title" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title" type="xs:string" />
+              <xs:element name="Artist" msprop:Genreator_ColumnVarNameInTable="columnArtist" msprop:Genreator_ColumnPropNameInTable="ArtistColumn" msprop:Generator_ColumnVarNameInTable="columnArtist" msprop:Genreator_UserColumnName="Artist" msprop:Genreator_ColumnPropNameInRow="Artist" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="Artist" msprop:Generator_ColumnPropNameInTable="ArtistColumn" msprop:Generator_UserColumnName="Artist" type="xs:string" />
+              <xs:element name="Album" msprop:Genreator_ColumnVarNameInTable="columnAlbum" msprop:Genreator_ColumnPropNameInTable="AlbumColumn" msprop:Generator_ColumnVarNameInTable="columnAlbum" msprop:Genreator_UserColumnName="Album" msprop:Genreator_ColumnPropNameInRow="Album" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="Album" msprop:Generator_ColumnPropNameInTable="AlbumColumn" msprop:Generator_UserColumnName="Album" type="xs:string" />
+              <xs:element name="Genre" msprop:Genreator_ColumnVarNameInTable="columnGenre" msprop:Genreator_ColumnPropNameInTable="GenreColumn" msprop:Generator_ColumnVarNameInTable="columnGenre" msprop:Genreator_UserColumnName="Genre" msprop:Genreator_ColumnPropNameInRow="Genre" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="Genre" msprop:Generator_ColumnPropNameInTable="GenreColumn" msprop:Generator_UserColumnName="Genre" type="xs:string" />
+              <xs:element name="Time" msprop:Genreator_ColumnVarNameInTable="columnTime" msprop:Genreator_ColumnPropNameInTable="TimeColumn" msprop:Generator_ColumnVarNameInTable="columnTime" msprop:Genreator_UserColumnName="Time" msprop:Genreator_ColumnPropNameInRow="Time" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="Time" msprop:Generator_ColumnPropNameInTable="TimeColumn" msprop:Generator_UserColumnName="Time" type="xs:string" />
+              <xs:element name="Track" msprop:Genreator_ColumnVarNameInTable="columnTrack" msprop:Genreator_ColumnPropNameInTable="TrackColumn" msprop:Generator_ColumnVarNameInTable="columnTrack" msprop:Genreator_UserColumnName="Track" msprop:Genreator_ColumnPropNameInRow="Track" msprop:Generator_ColumnPropNameInRow="Track" msprop:Generator_ColumnPropNameInTable="TrackColumn" msprop:Generator_UserColumnName="Track" type="xs:int" default="1" />
+              <xs:element name="Size" msprop:Genreator_ColumnVarNameInTable="columnSize" msprop:Genreator_ColumnPropNameInTable="SizeColumn" msprop:Generator_ColumnVarNameInTable="columnSize" msprop:Genreator_UserColumnName="Size" msprop:Genreator_ColumnPropNameInRow="Size" msprop:Generator_ColumnPropNameInRow="Size" msprop:Generator_ColumnPropNameInTable="SizeColumn" msprop:Generator_UserColumnName="Size" type="xs:int" default="1" />
+              <xs:element name="PlayCount" msprop:Genreator_ColumnVarNameInTable="columnPlayCount" msprop:Genreator_ColumnPropNameInTable="PlayCountColumn" msprop:Generator_ColumnVarNameInTable="columnPlayCount" msprop:Genreator_UserColumnName="PlayCount" msprop:Genreator_ColumnPropNameInRow="PlayCount" msprop:Generator_ColumnPropNameInRow="PlayCount" msprop:Generator_ColumnPropNameInTable="PlayCountColumn" msprop:Generator_UserColumnName="PlayCount" type="xs:int" default="1" />
+              <xs:element name="Status" msprop:Genreator_ColumnVarNameInTable="columnStatus" msprop:Genreator_ColumnPropNameInTable="StatusColumn" msprop:Generator_ColumnVarNameInTable="columnStatus" msprop:Genreator_UserColumnName="Status" msprop:Genreator_ColumnPropNameInRow="Status" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="Status" msprop:Generator_ColumnPropNameInTable="StatusColumn" msprop:Generator_UserColumnName="Status" type="xs:string" />
+              <xs:element name="CumulativeProbability" msprop:Generator_UserColumnName="CumulativeProbability" msprop:Generator_ColumnPropNameInRow="CumulativeProbability" msprop:Generator_ColumnVarNameInTable="columnCumulativeProbability" msprop:Generator_ColumnPropNameInTable="CumulativeProbabilityColumn" type="xs:double" default="1" />
+              <xs:element name="MMProbability" msprop:Generator_UserColumnName="MMProbability" msprop:Generator_ColumnPropNameInRow="MMProbability" msprop:Generator_ColumnVarNameInTable="columnMMProbability" msprop:Generator_ColumnPropNameInTable="MMProbabilityColumn" type="xs:double" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1">
+      <xs:selector xpath=".//mstns:Music" />
+      <xs:field xpath="mstns:ID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,13 @@
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\bin\Debug\MusicManager.exe.config
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\bin\Debug\MusicManager.exe
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\bin\Debug\MusicManager.pdb
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\bin\Debug\Interop.Shell32.dll
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Debug\MusicManager.frmAbout.resources
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Debug\MusicManager.frmMusicManager.resources
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Debug\MusicManager.frmOption.resources
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Debug\MusicManager.frmVolumnController.resources
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Debug\MusicManager.Properties.Resources.resources
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Debug\MusicManager.csproj.GenerateResource.Cache
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Debug\MusicManager.exe
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Debug\MusicManager.pdb
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Debug\MusicManager.Splash.resources
