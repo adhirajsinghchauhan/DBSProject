@@ -83,29 +83,29 @@
   <ItemGroup>
     <Compile Include="ColumnSorter.cs" />
     <Compile Include="CopyDataHelper.cs" />
-    <Compile Include="frmAbout.cs">
+    <Compile Include="About.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmAbout.Designer.cs">
-      <DependentUpon>frmAbout.cs</DependentUpon>
+    <Compile Include="About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmMusicManager.cs">
+    <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMusicManager.Designer.cs">
-      <DependentUpon>frmMusicManager.cs</DependentUpon>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmOption.cs">
+    <Compile Include="Options.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmOption.Designer.cs">
-      <DependentUpon>frmOption.cs</DependentUpon>
+    <Compile Include="Options.Designer.cs">
+      <DependentUpon>Options.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmVolumnController.cs">
+    <Compile Include="VolumeController.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmVolumnController.Designer.cs">
-      <DependentUpon>frmVolumnController.cs</DependentUpon>
+    <Compile Include="VolumeController.Designer.cs">
+      <DependentUpon>VolumeController.cs</DependentUpon>
     </Compile>
     <Compile Include="MMConfiguration.cs">
       <DependentUpon>MMConfiguration.xsd</DependentUpon>
@@ -127,21 +127,21 @@
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="frmAbout.resx">
+    <EmbeddedResource Include="About.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>frmAbout.cs</DependentUpon>
+      <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmMusicManager.resx">
+    <EmbeddedResource Include="Main.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>frmMusicManager.cs</DependentUpon>
+      <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmOption.resx">
+    <EmbeddedResource Include="Options.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>frmOption.cs</DependentUpon>
+      <DependentUpon>Options.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmVolumnController.resx">
+    <EmbeddedResource Include="VolumeController.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>frmVolumnController.cs</DependentUpon>
+      <DependentUpon>VolumeController.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -153,6 +153,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Setup.resx">
+      <DependentUpon>Setup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Splash.resx">
       <DependentUpon>Splash.cs</DependentUpon>
     </EmbeddedResource>
@@ -191,6 +194,12 @@
     <Compile Include="ReadPlaylist.cs" />
     <Compile Include="SerializeHelper.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Setup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Setup.Designer.cs">
+      <DependentUpon>Setup.cs</DependentUpon>
+    </Compile>
     <Compile Include="ShellID3TagReader.cs" />
     <Compile Include="Splash.cs">
       <SubType>Form</SubType>

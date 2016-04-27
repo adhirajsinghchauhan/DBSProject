@@ -7,9 +7,9 @@ using System.Reflection;
 
 namespace MusicManager
 {
-    partial class frmAbout : Form
+    partial class About : Form
     {
-        public frmAbout()
+        public About()
         {
             InitializeComponent();
 
@@ -21,7 +21,8 @@ namespace MusicManager
             this.labelProductName.Text = AssemblyProduct;
             this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
-            this.labelCompanyName.Text = AssemblyCompany;
+            this.linkLabelCompanyName.Text = AssemblyCompany;
+			this.linkLabelCompanyName.Links.Add(0, 24, "https://github.com/asc42");
             this.textBoxDescription.Text = AssemblyDescription;
         }
 
@@ -110,6 +111,12 @@ namespace MusicManager
                 return ((AssemblyCompanyAttribute)attributes[0]).Company;
             }
         }
-        #endregion
-    }
+		#endregion
+
+		private void linkLabelCompanyName_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			linkLabelCompanyName.LinkVisited = true;
+			System.Diagnostics.Process.Start("http://github.com/asc42");
+		}
+	}
 }

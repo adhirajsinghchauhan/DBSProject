@@ -100,7 +100,7 @@ namespace MusicManager
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new frmMusicManager());
+                Application.Run(new Splash());
             }
             catch
             {

@@ -12,7 +12,7 @@ using System.Threading;
 using ListViewSorter;
 namespace MusicManager
 {
-    public partial class frmMusicManager : Form,IComparer<MMHistory.MusicRow>
+    public partial class Main : Form,IComparer<MMHistory.MusicRow>
     {
         public delegate void AddFileDelegate(string FileName, MP3File mp3File, string Status);
         public delegate void UpdateFileStatusDelegate(string key, string fileName,string Status);
@@ -42,7 +42,7 @@ namespace MusicManager
 		private static Image play = Image.FromFile("E:/IE CSE/Studios/Resources/Icons/Material Design/png/play106.png");
 		private static Image pause = Image.FromFile("E:/IE CSE/Studios/Resources/Icons/Material Design/png/pause44.png");
 
-		public frmMusicManager()
+		public Main()
         {            
             InitializeComponent();
             folderBrowserDialog = new FolderBrowserDialog();
@@ -51,7 +51,19 @@ namespace MusicManager
             MusicManagerHistory = new MMHistory();
             musicList=new List<MMHistory.MusicRow>();
             playedList = new List<MMHistory.MusicRow>();
-        }
+		}
+
+		public Main(String musicLocation)
+		{
+			InitializeComponent();
+			folderBrowserDialog = new FolderBrowserDialog();
+			totalFileSize = 0;
+			lvwColumnSorter = new ListViewColumnSorter();
+			MusicManagerHistory = new MMHistory();
+			musicList = new List<MMHistory.MusicRow>();
+			playedList = new List<MMHistory.MusicRow>();
+			loadButton.PerformClick();
+		}
 
 		private String formatTime(int milliseconds)
 		{
@@ -96,12 +108,11 @@ namespace MusicManager
             playedList.Clear();
             preventEvent = true;
             GenreList = MusicManagerHistory.Music.GetGenreList();
-            lbGenre.DataSource = GenreList;
+            listboxGenre.DataSource = GenreList;
             albumList = MusicManagerHistory.Music.GetAlbumList();
-            lbAlbum.DataSource = albumList;
+            listboxAlbum.DataSource = albumList;
             artistList = MusicManagerHistory.Music.GetArtistList();
-            lbArtist.DataSource = artistList;
-            //this.Invoke(new InvokeMethodDelegate(StartReloadTimer));
+            listboxArtist.DataSource = artistList;
             StartReloadTimer();
             preventEvent = false;
         }
@@ -225,7 +236,6 @@ namespace MusicManager
                 dest = dest.Replace("{Album}", album);
                 dest = dest.Replace("{Artist}", artist);
                 dest = dest.Replace("{Title}", dr.Title + fi.Extension);
-                //dest = dest.Replace("{Extention}", "mp3");
                 dest = dest.Replace("{Genre}", dr.Genre);
                 dest = dest.Replace("{FileName}", Path.GetFileName(fileName));
                 if (Directory.Exists(Path.GetDirectoryName(dest)) == false)
@@ -240,7 +250,6 @@ namespace MusicManager
                     }
                     else
                     {
-                        //FileInfo fi = new FileInfo(fileName);
                         if ((fi.Attributes & (FileAttributes.System
                     | FileAttributes.Compressed
                     | FileAttributes.Device
@@ -258,7 +267,6 @@ namespace MusicManager
                 }
                 catch
                 {
-                    //FileInfo fi = new FileInfo(fileName);
                     if ((fi.Attributes & (FileAttributes.System
                     | FileAttributes.Compressed
                     | FileAttributes.Device
@@ -351,8 +359,8 @@ namespace MusicManager
                 if(isNewFile)
                     MusicManagerHistory.Music.AddMusicRow(dr);
                 mp3FileHash.Add(FileName, dr);
-                this.tssSongsCount.Text = MusicManagerHistory.Music.Rows.Count + " Songs";
-                this.tssSize.Text = GetFileSize(totalFileSize);
+                this.numberOfSongs.Text = MusicManagerHistory.Music.Rows.Count + " Songs";
+                this.fileSize.Text = GetFileSize(totalFileSize);
             }
         }
         
@@ -423,9 +431,9 @@ namespace MusicManager
         private void DisplayMMHistory()
         {
             totalFileSize = 0;
-            lbGenre.Items.Clear();
-            lbAlbum.Items.Clear();
-            lbArtist.Items.Clear();
+            listboxGenre.Items.Clear();
+            listboxAlbum.Items.Clear();
+            listboxArtist.Items.Clear();
             if (File.Exists(ToolsManager.GetManager().LastLocation + "\\MMHistory.mmh"))
             {
                 MusicManagerHistory = new MMHistory();
@@ -442,12 +450,11 @@ namespace MusicManager
                     return;
                 }
                 GenreList = MusicManagerHistory.Music.GetGenreList();
-                lbGenre.DataSource = GenreList;
+                listboxGenre.DataSource = GenreList;
                 albumList = MusicManagerHistory.Music.GetAlbumList();
-                lbAlbum.DataSource = albumList;
+                listboxAlbum.DataSource = albumList;
                 artistList = MusicManagerHistory.Music.GetArtistList();
-                lbArtist.DataSource = artistList;
-                //this.Invoke(new InvokeMethodDelegate(StartReloadTimer));
+                listboxArtist.DataSource = artistList;
                 StartReloadTimer();
             }
         }
@@ -456,34 +463,27 @@ namespace MusicManager
         {
             try
             {
-                //MusicManagerHistory = (MMHistory) SerializeHelper.GetHelper().ReadFile(ToolsManager.GetManager().LastLocation + "\\MMHistory.mmh");
                 MusicManagerHistory.ReadXml(ToolsManager.GetManager().LastLocation + "\\MMHistory.mmh");
             }
             catch
             {
-                MessageBox.Show("Failed to load music manager history", "Fail to load",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("Failed to load music manager history", "Fail to load", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 if (File.Exists(ToolsManager.GetManager().LastLocation + "\\MMHistory.mmh"))
                     File.Delete(ToolsManager.GetManager().LastLocation + "\\MMHistory.mmh");
                 MusicManagerHistory = null;
             }
-            //MusicManagerHistory.ReadXml(ToolsManager.GetManager().LastLocation + "\\MMHistory.mmh");
-            //MusicManagerHistory=Ser
         }
         private void StartReloadTimer()
         {
-            //tmrReload.Enabled=true;
             ReloadListView();
-            //Thread th = new Thread(new ThreadStart(ReloadListView));
-            //th.IsBackground = true;
-            //th.Start();
         }
         private void DisplayFreeSpace()
         {
             string root = Directory.GetDirectoryRoot(ToolsManager.GetManager().LastLocation);
             DriveInfo di = new DriveInfo(root);
-            tssFree.Text = GetFileSize(di.TotalFreeSpace)+ " Free";
+            freeBytes.Text = GetFileSize(di.TotalFreeSpace)+ " Free";
         }
-        private void frmMusicManager_Load(object sender, EventArgs e)
+        private void MusicManager_Load(object sender, EventArgs e)
         {
             string[] argv = Environment.GetCommandLineArgs();
             
@@ -539,9 +539,7 @@ namespace MusicManager
                     }
                 }
             }
-            //preventEvent = true;
-            this.locationComboBox.Text = ToolsManager.GetManager().LastLocation;
-            //////preventEvent = false;            
+            this.locationComboBox.Text = ToolsManager.GetManager().LastLocation;          
             Directory.SetCurrentDirectory(ToolsManager.GetManager().LastLocation);
             DisplayFreeSpace();
             DisplayMMHistory();
@@ -589,8 +587,8 @@ namespace MusicManager
                 }
                 LoadExistingFiles(subfolder);
             }
-            this.tssSongsCount.Text = MusicManagerHistory.Music.Rows.Count + " Songs";
-            this.tssSize.Text = GetFileSize(totalFileSize);
+            this.numberOfSongs.Text = MusicManagerHistory.Music.Rows.Count + " Songs";
+            this.fileSize.Text = GetFileSize(totalFileSize);
             
         }
         private void LoadExistingFiles()
@@ -601,29 +599,26 @@ namespace MusicManager
             LoadExistingFiles(ToolsManager.GetManager().LastLocation);
             preventEvent = true;
             GenreList = MusicManagerHistory.Music.GetGenreList();
-            lbGenre.DataSource = GenreList;
+            listboxGenre.DataSource = GenreList;
             albumList = MusicManagerHistory.Music.GetAlbumList();
-            lbAlbum.DataSource = albumList;
+            listboxAlbum.DataSource = albumList;
             artistList = MusicManagerHistory.Music.GetArtistList();
-            lbArtist.DataSource = artistList;
+            listboxArtist.DataSource = artistList;
             preventEvent = false;
             StartReloadTimer();
-            ////mp3FileHash.Clear();
-            ////this.Invoke(new InvokeMethodDelegate(MusicListChanged));
             this.statusStrip.Invoke(new StatusChangedDelegate(StatusChanged), new object[] { "Ready" });            
         }
-        private void btnLoad_Click(object sender, EventArgs e)
+        private void loadButton_Click(object sender, EventArgs e)
         {
             EnabledDisabledAllOperation(false);
             this.stopToolStripMenuItem_Click(sender, e);
             this.statusStrip.Invoke(new StatusChangedDelegate(StatusChanged), new object[] { "Loading..." });
-            dgMusic.DataSource = null;
+            dataGridMusic.DataSource = null;
             if (musicList != null)
             {
                 musicList.Clear();
                 playedList.Clear();
             }
-            //dgMusic.Rows.Clear();
             Thread th = new Thread(new ThreadStart(LoadExistingFiles));
             th.IsBackground = true;
             th.Start();
@@ -631,13 +626,13 @@ namespace MusicManager
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (dgMusic.SelectedRows.Count == 0)
+            if (dataGridMusic.SelectedRows.Count == 0)
             {
                 return;
             }
-            for (int i = 0; i < dgMusic.SelectedRows.Count; i++)
+            for (int i = 0; i < dataGridMusic.SelectedRows.Count; i++)
             {
-                if (dgMusic.SelectedRows[i].DataBoundItem == drPlaying)
+                if (dataGridMusic.SelectedRows[i].DataBoundItem == drPlaying)
                 {
                     return;
                 }
@@ -645,9 +640,9 @@ namespace MusicManager
             if (MessageBox.Show("Are you sure to delete?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 List<MMHistory.MusicRow> selectedMusic = new List<MMHistory.MusicRow>();
-                for (int i = 0; i < dgMusic.SelectedRows.Count; i++)
+                for (int i = 0; i < dataGridMusic.SelectedRows.Count; i++)
                 {
-                    MMHistory.MusicRow dr = (MMHistory.MusicRow)dgMusic.SelectedRows[i].DataBoundItem;
+                    MMHistory.MusicRow dr = (MMHistory.MusicRow)dataGridMusic.SelectedRows[i].DataBoundItem;
                     selectedMusic.Add(dr);
                 }                
                 for (int i = selectedMusic.Count - 1; i >= 0; i--)
@@ -709,10 +704,10 @@ namespace MusicManager
                     dr.Delete();
                 }
                 DisplayFreeSpace();
-                dgMusic.ClearSelection();
+                dataGridMusic.ClearSelection();
                 MusicManagerHistoryChanged();
-                this.tssSongsCount.Text = musicList.Count + " Songs";
-                this.tssSize.Text = GetFileSize(totalFileSize);
+                this.numberOfSongs.Text = musicList.Count + " Songs";
+                this.fileSize.Text = GetFileSize(totalFileSize);
             }
         }
 
@@ -725,23 +720,21 @@ namespace MusicManager
         {
             randomToolStripMenuItem.Checked = shaffleToolStripMenuItem.Checked = ToolsManager.GetManager().IsRandom;
             pasteToolStripMenuItem2.Enabled = pasteToolStripMenuItem1.Enabled = pasteToolStripMenuItem.Enabled = Clipboard.GetFileDropList().Count > 0;
-            deleteToolStripMenuItem2.Enabled = deleteToolStripMenuItem1.Enabled = deleteToolStripMenuItem.Enabled = dgMusic.SelectedRows.Count > 0;
+            deleteToolStripMenuItem2.Enabled = deleteToolStripMenuItem1.Enabled = deleteToolStripMenuItem.Enabled = dataGridMusic.SelectedRows.Count > 0;
             pauseToolStripMenuItem2.Enabled = pauseToolStripMenuItem.Enabled = pauseToolStripMenuItem1.Enabled = false;
-            //if(drPlaying!=null)
-                //deleteToolStripMenuItem2.Enabled = deleteToolStripMenuItem1.Enabled = deleteToolStripMenuItem.Enabled = false;
-            for (int i = 0; i < dgMusic.SelectedRows.Count; i++)
+            for (int i = 0; i < dataGridMusic.SelectedRows.Count; i++)
             {
-                if (dgMusic.SelectedRows[i].DataBoundItem==drPlaying)
+                if (dataGridMusic.SelectedRows[i].DataBoundItem==drPlaying)
                 {
                     deleteToolStripMenuItem2.Enabled = deleteToolStripMenuItem1.Enabled = deleteToolStripMenuItem.Enabled = false;
                 }
             }
-            copyToolStripMenuItem2.Enabled = copyToolStripMenuItem1.Enabled = copyToolStripMenuItem.Enabled = dgMusic.SelectedRows.Count > 0;
-            playToolStripMenuItem2.Enabled = playToolStripMenuItem1.Enabled = playToolStripMenuItem.Enabled = dgMusic.SelectedRows.Count == 1 || (dgMusic.Rows.Count > 0 && ToolsManager.GetManager().IsRandom);
+            copyToolStripMenuItem2.Enabled = copyToolStripMenuItem1.Enabled = copyToolStripMenuItem.Enabled = dataGridMusic.SelectedRows.Count > 0;
+            playToolStripMenuItem2.Enabled = playToolStripMenuItem1.Enabled = playToolStripMenuItem.Enabled = dataGridMusic.SelectedRows.Count == 1 || (dataGridMusic.Rows.Count > 0 && ToolsManager.GetManager().IsRandom);
 
-            clearToolStripMenuItem1.Enabled = clearToolStripMenuItem.Enabled = dgMusic.Rows.Count > 0;
-            nextToolStripMenuItem1.Enabled = nextToolStripMenuItem.Enabled = dgMusic.Rows.Count > 0;
-            previousToolStripMenuItem1.Enabled = previousToolStripMenuItem.Enabled = dgMusic.Rows.Count > 0 && shaffleToolStripMenuItem.Checked == false;
+            clearToolStripMenuItem1.Enabled = clearToolStripMenuItem.Enabled = dataGridMusic.Rows.Count > 0;
+            nextToolStripMenuItem1.Enabled = nextToolStripMenuItem.Enabled = dataGridMusic.Rows.Count > 0;
+            previousToolStripMenuItem1.Enabled = previousToolStripMenuItem.Enabled = dataGridMusic.Rows.Count > 0 && shaffleToolStripMenuItem.Checked == false;
             if (drPlaying != null)
             {
                 pauseToolStripMenuItem2.Enabled = pauseToolStripMenuItem.Enabled = pauseToolStripMenuItem1.Enabled = true;
@@ -790,10 +783,10 @@ namespace MusicManager
 
         private void listViewFiles_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            string[] files=new string[dgMusic.SelectedRows.Count];
-            for (int i = 0; i < dgMusic.SelectedRows.Count; i++)
+            string[] files=new string[dataGridMusic.SelectedRows.Count];
+            for (int i = 0; i < dataGridMusic.SelectedRows.Count; i++)
             {
-                MMHistory.MusicRow dr = (MMHistory.MusicRow)dgMusic.SelectedRows[i].DataBoundItem;
+                MMHistory.MusicRow dr = (MMHistory.MusicRow)dataGridMusic.SelectedRows[i].DataBoundItem;
                 files[i] = dr.FullFilename;
             }
             if (files != null || files.Length>0)
@@ -804,10 +797,10 @@ namespace MusicManager
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string[] files = new string[dgMusic.SelectedRows.Count];
-            for (int i = 0; i < dgMusic.SelectedRows.Count; i++)
+            string[] files = new string[dataGridMusic.SelectedRows.Count];
+            for (int i = 0; i < dataGridMusic.SelectedRows.Count; i++)
             {
-                MMHistory.MusicRow dr = (MMHistory.MusicRow)dgMusic.SelectedRows[i].DataBoundItem;
+                MMHistory.MusicRow dr = (MMHistory.MusicRow)dataGridMusic.SelectedRows[i].DataBoundItem;
                 files[i] = ToolsManager.GetManager().LastLocation + "\\" + dr.FullFilename;
             }
             if (files != null || files.Length > 0)
@@ -828,7 +821,6 @@ namespace MusicManager
         private void SaveMMHistory()
         {
             if (MusicManagerHistory != null)
-                //SerializeHelper.GetHelper().SaveFile(MusicManagerHistory, ToolsManager.GetManager().LastLocation + "\\MMHistory.mmh");
                 MusicManagerHistory.WriteXml(ToolsManager.GetManager().LastLocation + "\\MMHistory.mmh");
         }
         private void playToolStripMenuItem_Click(object sender, EventArgs e)
@@ -840,14 +832,14 @@ namespace MusicManager
 				drPlaying.Status = Player.GetPlayer().Status().ToUpper();
                 return;
             }
-            if (dgMusic.SelectedRows.Count == 1)
+            if (dataGridMusic.SelectedRows.Count == 1)
             {
-                MMHistory.MusicRow dr = (MMHistory.MusicRow)dgMusic.SelectedRows[0].DataBoundItem;
+                MMHistory.MusicRow dr = (MMHistory.MusicRow)dataGridMusic.SelectedRows[0].DataBoundItem;
                 IncreasePlayCount(dr);
                 Play(musicList.IndexOf(dr));
                 playedList.Clear();
             }
-            else if (dgMusic.Rows.Count > 0 && ToolsManager.GetManager().IsRandom)
+            else if (dataGridMusic.Rows.Count > 0 && ToolsManager.GetManager().IsRandom)
             {                
                 RandomPlay();
             }
@@ -906,7 +898,7 @@ namespace MusicManager
             }
             Player.GetPlayer().Play(drPlaying.FullFilename);
             CalculateNextProbability();
-            dgMusic.Refresh();
+            dataGridMusic.Refresh();
             isPlaying = true;
             tmrPlay.Enabled = isPlaying;
         }
@@ -916,11 +908,11 @@ namespace MusicManager
             Player.GetPlayer().Close();
             if(drPlaying!=null)
                 drPlaying.Status = "";
-            dgMusic.Refresh();
+            dataGridMusic.Refresh();
             drPlaying = null;
             isPlaying = false;
             tmrPlay.Enabled = isPlaying;
-			trackBar.Value = 0;
+			progressBar.Value = 0;
 			currentTime.Text = "00:00";
         }
 
@@ -935,7 +927,7 @@ namespace MusicManager
 					if (drPlaying != null)
 					{
 						drPlaying.Status = "";
-						dgMusic.Refresh();
+						dataGridMusic.Refresh();
 					}
 					if (ToolsManager.GetManager().IsRandom == true)
 					{
@@ -960,7 +952,7 @@ namespace MusicManager
 					if (drPlaying.Status != status)
 					{
 						drPlaying.Status = status;
-						dgMusic.Refresh();
+						dataGridMusic.Refresh();
 					}
 				}
 				else if (status == "PLAYING" && drPlaying != null)
@@ -968,8 +960,6 @@ namespace MusicManager
 					Player player = Player.GetPlayer();
 					currentTime.Text = formatTime(player.getCurrentPosition(drPlaying.FullFilename));
 					totalTime.Text = formatTime(player.getSongLength(drPlaying.FullFilename));
-					trackBar.Maximum = player.getSongLength(drPlaying.FullFilename);
-					trackBar.Value = player.getCurrentPosition(drPlaying.FullFilename);
 					currentArtist.Text = drPlaying.Artist;
 					currentSong.Text = drPlaying.Title;
 					progressBar.Maximum = player.getSongLength(drPlaying.FullFilename);
@@ -982,25 +972,16 @@ namespace MusicManager
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.WindowState = previousWindowState;
-            //if (this.Visible == false)
-            //    this.Show();
-            //this.Show();
         }
-        //private bool isExit = false;
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //isExit = true;
             SaveMMHistory();
             this.Close();
         }
 
-        private void frmMusicManager_FormClosing(object sender, FormClosingEventArgs e)
+        private void MusicManager_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //if (isExit == false)
-            //{
-            //    e.Cancel = true;
-            //    this.Hide();
-            //}
+			Application.Exit();
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
@@ -1011,11 +992,11 @@ namespace MusicManager
         private void optionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string oldGroup = ToolsManager.GetManager().GroupBy;
-            frmOption frm = new frmOption();
+            Options frm = new Options();
             if (frm.ShowDialog() == DialogResult.OK)
             {
                 CalculateNextProbability();
-                dgMusic.Refresh();
+                dataGridMusic.Refresh();
             }
         }
         
@@ -1028,14 +1009,14 @@ namespace MusicManager
                 MusicManagerHistory = null;
             }
             preventEvent = true;
-            lbAlbum.DataSource = null;
-            lbArtist.DataSource = null;
-            lbGenre.DataSource = null;
+            listboxAlbum.DataSource = null;
+            listboxArtist.DataSource = null;
+            listboxGenre.DataSource = null;
             preventEvent = false;
             stopToolStripMenuItem_Click(sender, e);
             musicList = MusicManagerHistory.Music.GetMusic();
             playedList.Clear();
-            dgMusic.DataSource = musicList;
+            dataGridMusic.DataSource = musicList;
             FillupMusicGrid();
             //dgMusic.DataSource = null;
             //if(musicList!=null)
@@ -1045,9 +1026,9 @@ namespace MusicManager
             //musicList = null;
             totalPlayCount = 0;
             mp3FileHash.Clear();
-            this.tssSongsCount.Text = "0 Songs";
+            this.numberOfSongs.Text = "0 Songs";
             totalFileSize = 0;
-            this.tssSize.Text = GetFileSize(totalFileSize);
+            this.fileSize.Text = GetFileSize(totalFileSize);
         }
 
         private void pauseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1119,8 +1100,8 @@ namespace MusicManager
             }            
             Play(index);
             
-            dgMusic.FirstDisplayedScrollingRowIndex = index;
-            dgMusic.Refresh();
+            dataGridMusic.FirstDisplayedScrollingRowIndex = index;
+            dataGridMusic.Refresh();
         }
 
         private void shuffleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1213,57 +1194,57 @@ namespace MusicManager
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmAbout frm = new frmAbout();
+            About frm = new About();
             frm.ShowDialog();
         }
         private void GetSelectedGenreList(ArrayList GenreList)
         {
-            if (lbGenre.Items.Count>0&&lbGenre.SelectedItems.Contains(lbGenre.Items[0]))
+            if (listboxGenre.Items.Count>0&&listboxGenre.SelectedItems.Contains(listboxGenre.Items[0]))
             {
-                for (int i = 1; i < lbGenre.Items.Count; i++)
+                for (int i = 1; i < listboxGenre.Items.Count; i++)
                 {
-                    GenreList.Add(lbGenre.Items[i].ToString());
+                    GenreList.Add(listboxGenre.Items[i].ToString());
                 }
             }
             else
             {
-                for (int i = 0; i < lbGenre.SelectedItems.Count; i++)
+                for (int i = 0; i < listboxGenre.SelectedItems.Count; i++)
                 {
-                    GenreList.Add(lbGenre.SelectedItems[i].ToString());
+                    GenreList.Add(listboxGenre.SelectedItems[i].ToString());
                 }
             }
         }
         private void GetSelectedAlbumList(ArrayList albumList)
         {
-            if (lbAlbum.Items.Count > 0 && lbAlbum.SelectedItems.Contains(lbAlbum.Items[0]))
+            if (listboxAlbum.Items.Count > 0 && listboxAlbum.SelectedItems.Contains(listboxAlbum.Items[0]))
             {
-                for (int i = 1; i < lbAlbum.Items.Count; i++)
+                for (int i = 1; i < listboxAlbum.Items.Count; i++)
                 {
-                    albumList.Add(lbAlbum.Items[i].ToString());
+                    albumList.Add(listboxAlbum.Items[i].ToString());
                 }
             }
             else
             {
-                for (int i = 0; i < lbAlbum.SelectedItems.Count; i++)
+                for (int i = 0; i < listboxAlbum.SelectedItems.Count; i++)
                 {
-                    albumList.Add(lbAlbum.SelectedItems[i].ToString());
+                    albumList.Add(listboxAlbum.SelectedItems[i].ToString());
                 }
             }
         }
         private void GetSelectedArtistList(ArrayList artistList)
         {
-            if (lbArtist.Items.Count > 0 && lbArtist.SelectedItems.Contains(lbArtist.Items[0]))
+            if (listboxArtist.Items.Count > 0 && listboxArtist.SelectedItems.Contains(listboxArtist.Items[0]))
             {
-                for (int i = 1; i < lbArtist.Items.Count; i++)
+                for (int i = 1; i < listboxArtist.Items.Count; i++)
                 {
-                    artistList.Add(lbArtist.Items[i].ToString());
+                    artistList.Add(listboxArtist.Items[i].ToString());
                 }
             }
             else
             {
-                for (int i = 0; i < lbArtist.SelectedItems.Count; i++)
+                for (int i = 0; i < listboxArtist.SelectedItems.Count; i++)
                 {
-                    artistList.Add(lbArtist.SelectedItems[i].ToString());
+                    artistList.Add(listboxArtist.SelectedItems[i].ToString());
                 }
             }
         }
@@ -1271,11 +1252,11 @@ namespace MusicManager
         {
             //while (preventEvent) ;
             ArrayList GenreList=new ArrayList();
-            lbGenre.Invoke(new GetSelectedListDelegate(GetSelectedGenreList), new object[] {GenreList });
+            listboxGenre.Invoke(new GetSelectedListDelegate(GetSelectedGenreList), new object[] {GenreList });
             ArrayList artistList = new ArrayList();
-            lbArtist.Invoke(new GetSelectedListDelegate(GetSelectedArtistList), new object[] { artistList });
+            listboxArtist.Invoke(new GetSelectedListDelegate(GetSelectedArtistList), new object[] { artistList });
             ArrayList albumList = new ArrayList();
-            lbAlbum.Invoke(new GetSelectedListDelegate(GetSelectedAlbumList), new object[] { albumList });
+            listboxAlbum.Invoke(new GetSelectedListDelegate(GetSelectedAlbumList), new object[] { albumList });
             musicList = MusicManagerHistory.Music.GetMusic(GenreList, artistList, albumList);
             playedList.Clear();
             totalFileSize = 0;
@@ -1322,50 +1303,51 @@ namespace MusicManager
         private void FillupMusicGrid()
         {
             
-            if (dgMusic.DataSource != musicList)
+            if (dataGridMusic.DataSource != musicList)
             {                                                
-                if (dgMusic.AutoGenerateColumns)
+                if (dataGridMusic.AutoGenerateColumns)
                 {
-                    dgMusic.Columns.Clear();
-                    dgMusic.DataSource = musicList;
-                    dgMusic.Columns["Filename"].HeaderText = "File Name";
-                    dgMusic.Columns["Filename"].Width = 160;
-                    dgMusic.Columns["Filename"].DisplayIndex = 0;
-                    dgMusic.Columns["Title"].DisplayIndex = 1;
-                    dgMusic.Columns["Title"].Width = 160;
-                    dgMusic.Columns["Artist"].Width = 120;
-                    dgMusic.Columns["Artist"].DisplayIndex = 2;
-                    dgMusic.Columns["Album"].DisplayIndex = 3;
-                    dgMusic.Columns["Album"].Width = 100;
-                    dgMusic.Columns["Size"].DisplayIndex = 4;
-                    dgMusic.Columns["Size"].Width = 90;
-                    dgMusic.Columns["Genre"].DisplayIndex = 5;
-                    dgMusic.Columns["Genre"].Width = 100;
-                    dgMusic.Columns["Time"].DisplayIndex = 6;
-                    dgMusic.Columns["Time"].Width = 90;
-                    dgMusic.Columns["MMProbability"].HeaderText = "Probability";
-                    dgMusic.Columns["MMProbability"].DisplayIndex = 7;
-                    dgMusic.Columns["MMProbability"].Width = 100;
-                    dgMusic.Columns["CumulativeProbability"].HeaderText = "Cumulative Probability";
-                    dgMusic.Columns["CumulativeProbability"].DisplayIndex = 8;
-                    dgMusic.Columns["CumulativeProbability"].Width = 120;
-                    dgMusic.Columns["Status"].DisplayIndex = 9;
-                    dgMusic.Columns["Status"].Width = 90;
+                    dataGridMusic.Columns.Clear();
+                    dataGridMusic.DataSource = musicList;
+                    dataGridMusic.Columns["Filename"].HeaderText = "File Name";
+                    dataGridMusic.Columns["Filename"].Width = 160;
+                    dataGridMusic.Columns["Filename"].DisplayIndex = 0;
+                    dataGridMusic.Columns["Title"].DisplayIndex = 1;
+                    dataGridMusic.Columns["Title"].Width = 160;
+                    dataGridMusic.Columns["Artist"].Width = 120;
+                    dataGridMusic.Columns["Artist"].DisplayIndex = 2;
+                    dataGridMusic.Columns["Album"].DisplayIndex = 3;
+                    dataGridMusic.Columns["Album"].Width = 100;
+                    dataGridMusic.Columns["Size"].DisplayIndex = 4;
+                    dataGridMusic.Columns["Size"].Width = 90;
+                    dataGridMusic.Columns["Genre"].DisplayIndex = 5;
+                    dataGridMusic.Columns["Genre"].Width = 100;
+                    dataGridMusic.Columns["Time"].DisplayIndex = 6;
+                    dataGridMusic.Columns["Time"].Width = 90;
+                    dataGridMusic.Columns["MMProbability"].HeaderText = "Probability";
+                    dataGridMusic.Columns["MMProbability"].DisplayIndex = 7;
+                    dataGridMusic.Columns["MMProbability"].Width = 100;
+                    dataGridMusic.Columns["CumulativeProbability"].HeaderText = "Cumulative Probability";
+                    dataGridMusic.Columns["CumulativeProbability"].DisplayIndex = 8;
+                    dataGridMusic.Columns["CumulativeProbability"].Width = 120;
+                    dataGridMusic.Columns["Status"].DisplayIndex = 9;
+                    dataGridMusic.Columns["Status"].Width = 90;
 
-                    dgMusic.Columns["Track"].Visible = false;
-                    dgMusic.Columns["RowError"].Visible = false;
-                    dgMusic.Columns["FullFilename"].Visible = false;
-                    dgMusic.Columns["RowState"].Visible = false;
-                    dgMusic.Columns["ID"].Visible = false;
-                    dgMusic.Columns["Table"].Visible = false;
-                    dgMusic.Columns["PlayCount"].Visible = false;
-                    dgMusic.Columns["HasErrors"].Visible = false;
+                    dataGridMusic.Columns["Track"].Visible = false;
+                    dataGridMusic.Columns["RowError"].Visible = false;
+                    dataGridMusic.Columns["FullFilename"].Visible = false;
+                    dataGridMusic.Columns["RowState"].Visible = false;
+                    dataGridMusic.Columns["ID"].Visible = false;
+                    dataGridMusic.Columns["Table"].Visible = false;
+                    dataGridMusic.Columns["PlayCount"].Visible = false;
+                    dataGridMusic.Columns["HasErrors"].Visible = false;
                     ResizeColumn();
-                    dgMusic.AutoGenerateColumns = false;
+                    dataGridMusic.AutoGenerateColumns = false;
                 }
                 else
-                    dgMusic.DataSource = musicList;
-            }
+                    dataGridMusic.DataSource = musicList;
+				dataGridMusic.DefaultCellStyle.ForeColor = Color.Red;
+			}
 
         }
         private void MusicListChanged()
@@ -1373,8 +1355,8 @@ namespace MusicManager
             bool playTimer = tmrPlay.Enabled;
             tmrPlay.Enabled = false;
             FillupMusicGrid();
-            this.tssSongsCount.Text = musicList.Count + " Songs";
-            this.tssSize.Text = GetFileSize(totalFileSize);
+            this.numberOfSongs.Text = musicList.Count + " Songs";
+            this.fileSize.Text = GetFileSize(totalFileSize);
             tmrPlay.Enabled = playTimer;
         }
         private void lbGenre_SelectedIndexChanged(object sender, EventArgs e)
@@ -1384,7 +1366,7 @@ namespace MusicManager
                 preventEvent = true;
                 ArrayList GenreList = new ArrayList();
                 GetSelectedGenreList(GenreList);
-                lbArtist.DataSource = MusicManagerHistory.Music.GetArtistList(GenreList);
+                listboxArtist.DataSource = MusicManagerHistory.Music.GetArtistList(GenreList);
                 StartReloadTimer();
                 preventEvent = false;
             }
@@ -1398,7 +1380,7 @@ namespace MusicManager
                 GetSelectedGenreList(GenreList);
                 ArrayList artistList = new ArrayList();
                 GetSelectedArtistList(artistList);
-                lbAlbum.DataSource = MusicManagerHistory.Music.GetAlbumList(GenreList, artistList);
+                listboxAlbum.DataSource = MusicManagerHistory.Music.GetAlbumList(GenreList, artistList);
             }
             else
             {
@@ -1409,7 +1391,7 @@ namespace MusicManager
                     GetSelectedGenreList(GenreList);
                     ArrayList artistList = new ArrayList();
                     GetSelectedArtistList(artistList);
-                    lbAlbum.DataSource = MusicManagerHistory.Music.GetAlbumList(GenreList, artistList);
+                    listboxAlbum.DataSource = MusicManagerHistory.Music.GetAlbumList(GenreList, artistList);
                     StartReloadTimer();
                     preventEvent = false;
                 }
@@ -1463,7 +1445,7 @@ namespace MusicManager
         {
             if (e.Control&&e.KeyCode==Keys.A)
             {
-                dgMusic.SelectAll();
+                dataGridMusic.SelectAll();
             }
         }
         int endSelection = -1;
@@ -1477,9 +1459,9 @@ namespace MusicManager
 
         private void dgMusic_DoubleClick(object sender, EventArgs e)
         {
-            if (dgMusic.SelectedRows.Count == 1)
+            if (dataGridMusic.SelectedRows.Count == 1)
             {
-                MMHistory.MusicRow dr = (MMHistory.MusicRow)dgMusic.SelectedRows[0].DataBoundItem;
+                MMHistory.MusicRow dr = (MMHistory.MusicRow)dataGridMusic.SelectedRows[0].DataBoundItem;
                 IncreasePlayCount(dr);
                 Play(musicList.IndexOf(dr));
             }
@@ -1491,23 +1473,23 @@ namespace MusicManager
                 sortOrder = SortOrder.Descending;
             else
                 sortOrder = SortOrder.Ascending;
-            sortColumn = dgMusic.Columns[e.ColumnIndex].Name;
+            sortColumn = dataGridMusic.Columns[e.ColumnIndex].Name;
             musicList.Sort(this);
             CalculateNextProbability();
-            dgMusic.Refresh();
+            dataGridMusic.Refresh();
         }
 
         private void dgMusic_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgMusic.Columns[e.ColumnIndex].Name == "Size")
+            if (dataGridMusic.Columns[e.ColumnIndex].Name == "Size")
             {
-                MMHistory.MusicRow dr = (MMHistory.MusicRow)dgMusic.Rows[e.RowIndex].DataBoundItem;
+                MMHistory.MusicRow dr = (MMHistory.MusicRow)dataGridMusic.Rows[e.RowIndex].DataBoundItem;
                 e.FormattingApplied = true;
                 e.Value = GetFileSize(dr.Size);
             }
-            else if (dgMusic.Columns[e.ColumnIndex].Name == "MMProbability")
+            else if (dataGridMusic.Columns[e.ColumnIndex].Name == "MMProbability")
             {
-                MMHistory.MusicRow dr = (MMHistory.MusicRow)dgMusic.Rows[e.RowIndex].DataBoundItem;
+                MMHistory.MusicRow dr = (MMHistory.MusicRow)dataGridMusic.Rows[e.RowIndex].DataBoundItem;
                 //int mmRating = dr.PlayCount;
                 //int additionalRating = 0;
                 //if (drPlaying != null)
@@ -1538,9 +1520,9 @@ namespace MusicManager
                 e.Value = rating.ToString("0.#### %");
                 //dgMusic.Rows[e.RowIndex].HeaderCell.Value = Convert.ToString(e.RowIndex + 1);
             }
-            else if (dgMusic.Columns[e.ColumnIndex].Name == "CumulativeProbability")
+            else if (dataGridMusic.Columns[e.ColumnIndex].Name == "CumulativeProbability")
             {
-                MMHistory.MusicRow dr = (MMHistory.MusicRow)dgMusic.Rows[e.RowIndex].DataBoundItem;
+                MMHistory.MusicRow dr = (MMHistory.MusicRow)dataGridMusic.Rows[e.RowIndex].DataBoundItem;
                 double rating = dr.CumulativeProbability;
 
                 if (totalPlayCount != 0)
@@ -1549,10 +1531,10 @@ namespace MusicManager
                 }
                 e.Value = rating.ToString("0.#### %");
             }
-            else if (dgMusic.Columns[e.ColumnIndex].Name == "Status")
+            else if (dataGridMusic.Columns[e.ColumnIndex].Name == "Status")
             {
-                MMHistory.MusicRow dr = (MMHistory.MusicRow)dgMusic.Rows[e.RowIndex].DataBoundItem;
-                DataGridViewRow itm = dgMusic.Rows[e.RowIndex];
+                MMHistory.MusicRow dr = (MMHistory.MusicRow)dataGridMusic.Rows[e.RowIndex].DataBoundItem;
+                DataGridViewRow itm = dataGridMusic.Rows[e.RowIndex];
                 switch (dr.Status)
                 {
                     case "Queued":
@@ -1590,15 +1572,15 @@ namespace MusicManager
         private void ResizeColumn()
         {
             int total = 0;
-            for (int i = 0; i < dgMusic.Columns.Count; i++)
+            for (int i = 0; i < dataGridMusic.Columns.Count; i++)
             {
-                if (dgMusic.Columns[i].Visible)
-                    total += dgMusic.Columns[i].Width;
+                if (dataGridMusic.Columns[i].Visible)
+                    total += dataGridMusic.Columns[i].Width;
             }
             total += 17;
-            if (total < dgMusic.Width)
+            if (total < dataGridMusic.Width)
             {
-                dgMusic.Columns["Filename"].Width += dgMusic.Width - total;
+                dataGridMusic.Columns["Filename"].Width += dataGridMusic.Width - total;
             }
         }
 
@@ -1692,7 +1674,7 @@ namespace MusicManager
 
         private void volumControllerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmVolumnController frm = new frmVolumnController();
+            VolumeController frm = new VolumeController();
             frm.ShowDialog();
         }
 
@@ -1701,7 +1683,7 @@ namespace MusicManager
 
         }
 
-        private void frmMusicManager_Resize(object sender, EventArgs e)
+        private void MusicManager_Resize(object sender, EventArgs e)
         {
             if (this.WindowState != FormWindowState.Minimized)
                 previousWindowState = this.WindowState;
@@ -1713,12 +1695,12 @@ namespace MusicManager
                 this.ShowInTaskbar = true;
         }
         private FormWindowState previousWindowState = FormWindowState.Normal;
-        private void frmMusicManager_SizeChanged(object sender, EventArgs e)
+        private void MusicManager_SizeChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void frmMusicManager_ResizeBegin(object sender, EventArgs e)
+        private void MusicManager_ResizeBegin(object sender, EventArgs e)
         {
             
         }
@@ -1757,79 +1739,74 @@ namespace MusicManager
 			shuffleToolStripMenuItem_Click(sender, e);
 		}
 
-		private void repeatButton_Click(object sender, EventArgs e)
-		{
-			
-		}
-
 		private void playButton_MouseEnter(object sender, EventArgs e)
 		{
-			playButton.BackColor = Color.FromArgb(10, Color.Black);
+			playButton.BackColor = Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(90)))), ((int)(((byte)(100)))));
 		}
 
 		private void previousButton_MouseEnter(object sender, EventArgs e)
 		{
-			previousButton.BackColor = Color.FromArgb(10, Color.Black);
+			previousButton.BackColor = Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(90)))), ((int)(((byte)(100)))));
 		}
 
 		private void nextButton_MouseEnter(object sender, EventArgs e)
 		{
-			nextButton.BackColor = Color.FromArgb(10, Color.Black);
+			nextButton.BackColor = Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(90)))), ((int)(((byte)(100)))));
 		}
 
 		private void volumeButton_MouseEnter(object sender, EventArgs e)
 		{
-			volumeButton.BackColor = Color.FromArgb(10, Color.Black);
+			volumeButton.BackColor = Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(90)))), ((int)(((byte)(100)))));
 		}
 
 		private void shuffleButton_MouseEnter(object sender, EventArgs e)
 		{
-			shuffleButton.BackColor = Color.FromArgb(10, Color.Black);
+			shuffleButton.BackColor = Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(90)))), ((int)(((byte)(100)))));
 		}
 
 		private void repeatButton_MouseEnter(object sender, EventArgs e)
 		{
-			repeatButton.BackColor = Color.FromArgb(10, Color.Black);
-		}
-
-		private void repeatButton_MouseHover(object sender, EventArgs e)
-		{
-			repeatButton.BackColor = Color.FromArgb(10, Color.Black);
+			repeatButton.BackColor = Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(90)))), ((int)(((byte)(100)))));
 		}
 
 		private void previousButton_MouseLeave(object sender, EventArgs e)
 		{
-			previousButton.BackColor = Color.FromArgb(0, Color.Black);
+			previousButton.BackColor = Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(241)))), ((int)(((byte)(254)))));
 		}
 
 		private void volumeButton_MouseLeave(object sender, EventArgs e)
 		{
-			volumeButton.BackColor = Color.FromArgb(0, Color.Black);
+			volumeButton.BackColor = Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(241)))), ((int)(((byte)(254)))));
 		}
 
 		private void playButton_MouseLeave(object sender, EventArgs e)
 		{
-			playButton.BackColor = Color.FromArgb(0, Color.Black);
+			playButton.BackColor = Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(241)))), ((int)(((byte)(254)))));
 		}
 
 		private void nextButton_MouseLeave(object sender, EventArgs e)
 		{
-			nextButton.BackColor = Color.FromArgb(0, Color.Black);
+			nextButton.BackColor = Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(241)))), ((int)(((byte)(254)))));
 		}
 
 		private void shuffleButton_MouseLeave(object sender, EventArgs e)
 		{
-			shuffleButton.BackColor = Color.FromArgb(0, Color.Black);
+			shuffleButton.BackColor = Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(241)))), ((int)(((byte)(254)))));
 		}
 
-		private void trackBar_MouseUp(object sender, MouseEventArgs e)
+		private void progressBar_MouseUp(object sender, MouseEventArgs e)
 		{
-			Player.GetPlayer().SetPosition(trackBar.Value);
+			Player.GetPlayer().SetPosition(progressBar.Value);
+		}
+
+		private void Main_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			Application.Exit();
 		}
 
 		private void repeatButton_MouseLeave(object sender, EventArgs e)
 		{
-			repeatButton.BackColor = Color.FromArgb(0, Color.Black);
+			repeatButton.BackColor = Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(241)))), ((int)(((byte)(254)))));
 		}
 	}
 }

@@ -213,16 +213,14 @@
 </value>
   </data>
   <data name="label2.Text" xml:space="preserve">
-    <value>Welcome to Music Manager!
+    <value>Great!
 
-This app can play any .mp3 or .wma file on your system. Just select the folder location on the next screen and you're done. The most interesting feature of this app is its unique probability-based shuffle algorithm. In effect, each song has its own probablity of being the next one to play when shuffle is on. Most music players use a pseudo-random algorithm to pre-populate a playlist. However, in this app, you'll get to listen to songs that you normally listen to the most.
+Now that you know what this application does, why don't we start setting it up for you?
+We just did some magic and figured out where does Windows store your music files by default. Take a look, and confirm it (confirm anyway if you don't know)
 
-How? Each song's probablity increases in two cases:
-1. You manually select that song and play it, and
-2. You listen to a song completely
-This dynamic shuffling algorithm takes each song's cumulative probablities into account and populates the playlist accordingly.
 
-So let's get started, yeah?</value>
+
+Looks good?</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace MusicManager
 {
-    public partial class frmVolumnController : Form
+    public partial class VolumeController : Form
     {
-        public frmVolumnController()
+        public VolumeController()
         {
             InitializeComponent();
         }

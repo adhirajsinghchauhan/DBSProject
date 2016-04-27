@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace MusicManager
 {
-    public partial class frmOption : Form
+    public partial class Options : Form
     {
-        public frmOption()
+        public Options()
         {
             InitializeComponent();
         }
