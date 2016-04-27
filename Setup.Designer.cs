@@ -86,7 +86,7 @@
 			this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label2.Name = "label2";
 			this.label2.Padding = new System.Windows.Forms.Padding(10, 20, 10, 20);
-			this.label2.Size = new System.Drawing.Size(703, 276);
+			this.label2.Size = new System.Drawing.Size(703, 295);
 			this.label2.TabIndex = 5;
 			this.label2.Text = resources.GetString("label2.Text");
 			// 
@@ -112,9 +112,9 @@
 			this.panel2.Controls.Add(this.nopeButton);
 			this.panel2.Controls.Add(this.yeahButton);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel2.Location = new System.Drawing.Point(0, 335);
+			this.panel2.Location = new System.Drawing.Point(0, 341);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(703, 46);
+			this.panel2.Size = new System.Drawing.Size(703, 59);
 			this.panel2.TabIndex = 21;
 			// 
 			// nopeButton
@@ -125,7 +125,7 @@
 			this.nopeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.nopeButton.Font = new System.Drawing.Font("Segoe UI", 10.2F);
 			this.nopeButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(237)))), ((int)(((byte)(255)))));
-			this.nopeButton.Location = new System.Drawing.Point(522, 4);
+			this.nopeButton.Location = new System.Drawing.Point(516, 11);
 			this.nopeButton.Margin = new System.Windows.Forms.Padding(4);
 			this.nopeButton.Name = "nopeButton";
 			this.nopeButton.Size = new System.Drawing.Size(83, 35);
@@ -141,7 +141,7 @@
 			this.yeahButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.yeahButton.Font = new System.Drawing.Font("Segoe UI", 10.2F);
 			this.yeahButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(237)))), ((int)(((byte)(255)))));
-			this.yeahButton.Location = new System.Drawing.Point(613, 4);
+			this.yeahButton.Location = new System.Drawing.Point(607, 11);
 			this.yeahButton.Margin = new System.Windows.Forms.Padding(4);
 			this.yeahButton.Name = "yeahButton";
 			this.yeahButton.Size = new System.Drawing.Size(83, 35);
@@ -158,7 +158,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(50)))), ((int)(((byte)(56)))));
 			this.CancelButton = this.nopeButton;
-			this.ClientSize = new System.Drawing.Size(703, 381);
+			this.ClientSize = new System.Drawing.Size(703, 400);
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.locationComboBox);
 			this.Controls.Add(this.label2);

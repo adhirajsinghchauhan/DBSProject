@@ -12,13 +12,13 @@ namespace MusicManager
         private bool isOpen;
 
         [DllImport("winmm.dll")]
-        private static extern long mciSendString(string strCommand, StringBuilder strReturn, int iReturnLength, IntPtr hwndCallback);
+        private static extern int mciSendString(string strCommand, StringBuilder strReturn, int iReturnLength, IntPtr hwndCallback);
         private static Player player;
-        private int baseVolumn;
-        private int trebleVolumn;
-        private int leftVolumn;
-        private int rightVolumn;
-        private int masterVolumn;
+        private int baseVolume;
+        private int trebleVolume;
+        private int leftVolume;
+        private int rightVolume;
+        private int masterVolume;
 		public int nowPlaying;
 
         public Player()
@@ -107,8 +107,6 @@ namespace MusicManager
         {
             if (isOpen == true)
                 Close();
-            //byte [] bytes=System.Text.UnicodeEncoding.UTF8.GetBytes(FileName);
-            //string f = System.Text.UTF8Encoding.UTF8.GetString(bytes);
             Open(FileName);
             Play(false);
         }
@@ -120,6 +118,7 @@ namespace MusicManager
             Pcommand = "pause MediaFile";
             mciSendString(Pcommand, null, 0, IntPtr.Zero);
         }
+
         public bool IsPaused()
         {
             return Pcommand == "pause MediaFile";
@@ -143,12 +142,12 @@ namespace MusicManager
         {
             get
             {
-                return leftVolumn; //Guess could be used to return Volume level: I don't need it
+                return leftVolume;
             }
             set
             {
                 mciSendString(string.Concat("setaudio MediaFile left volume to ", value), null, 0, IntPtr.Zero);
-                leftVolumn = value;
+                leftVolume = value;
             }
         }
 
@@ -159,12 +158,12 @@ namespace MusicManager
         {
             get
             {
-                return rightVolumn; //Guess could be used to return Volume level: I don't need it
+                return rightVolume;
             }
             set
             {
                 mciSendString(string.Concat("setaudio MediaFile right volume to ", value), null, 0, IntPtr.Zero);
-                rightVolumn = value;
+                rightVolume = value;
             }
         }
 
@@ -175,12 +174,12 @@ namespace MusicManager
         {
             get
             {
-                return masterVolumn; //Guess could be used to return Volume level: I don't need it
+                return masterVolume;
             }
             set
             {
                 mciSendString(string.Concat("setaudio MediaFile volume to ", value), null, 0, IntPtr.Zero);
-                masterVolumn = value;
+                masterVolume = value;
             }
         }
 
@@ -191,12 +190,12 @@ namespace MusicManager
         {
             get
             {
-                return baseVolumn;
+                return baseVolume;
             }
             set
             {
                 mciSendString(string.Concat("setaudio MediaFile bass to ", value), null, 0, IntPtr.Zero);
-                baseVolumn = value;
+                baseVolume = value;
             }
         }
 
@@ -207,12 +206,12 @@ namespace MusicManager
         {
             get
             {
-                return trebleVolumn;
+                return trebleVolume;
             }
             set
             {
                 mciSendString(string.Concat("setaudio MediaFile treble to ", value), null, 0, IntPtr.Zero);
-                trebleVolumn = value;
+                trebleVolume = value;
             }
         }
 

@@ -84,7 +84,7 @@
 			this.yeahButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.yeahButton.Font = new System.Drawing.Font("Segoe UI", 10.2F);
 			this.yeahButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(237)))), ((int)(((byte)(255)))));
-			this.yeahButton.Location = new System.Drawing.Point(963, 4);
+			this.yeahButton.Location = new System.Drawing.Point(954, 4);
 			this.yeahButton.Margin = new System.Windows.Forms.Padding(4);
 			this.yeahButton.Name = "yeahButton";
 			this.yeahButton.Size = new System.Drawing.Size(83, 35);
@@ -116,7 +116,7 @@
 			this.nopeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.nopeButton.Font = new System.Drawing.Font("Segoe UI", 10.2F);
 			this.nopeButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(237)))), ((int)(((byte)(255)))));
-			this.nopeButton.Location = new System.Drawing.Point(872, 4);
+			this.nopeButton.Location = new System.Drawing.Point(863, 4);
 			this.nopeButton.Margin = new System.Windows.Forms.Padding(4);
 			this.nopeButton.Name = "nopeButton";
 			this.nopeButton.Size = new System.Drawing.Size(83, 35);
@@ -133,9 +133,9 @@
 			this.panel2.Controls.Add(this.nopeButton);
 			this.panel2.Controls.Add(this.yeahButton);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel2.Location = new System.Drawing.Point(0, 446);
+			this.panel2.Location = new System.Drawing.Point(0, 440);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(1050, 46);
+			this.panel2.Size = new System.Drawing.Size(1050, 52);
 			this.panel2.TabIndex = 6;
 			// 
 			// Splash

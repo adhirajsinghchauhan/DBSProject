@@ -33,11 +33,6 @@ namespace MusicManager
             }
             else
                 cmbFolderFormat.SelectedIndex = 0;
-            //index = cmbGroupBy.FindString(ToolsManager.GetManager().GroupBy);
-            //if (index >= 0)
-            //    cmbGroupBy.SelectedIndex = index;
-            //else
-            //    cmbGroupBy.SelectedIndex = 0;
             nudGenrePriority.Value = ToolsManager.GetManager().GenrePriority;
             nudArtistPriority.Value = ToolsManager.GetManager().ArtistPriority;
             nudAlbumPriority.Value = ToolsManager.GetManager().AlbumPriority;
@@ -61,7 +56,6 @@ namespace MusicManager
             }
             key2.SetValue("File Name Format", folderFormat);
             ToolsManager.GetManager().FileFormat = folderFormat;
-            //ToolsManager.GetManager().GroupBy = cmbGroupBy.Text;
             ToolsManager.GetManager().GenrePriority = (int)nudGenrePriority.Value;
             ToolsManager.GetManager().ArtistPriority = (int)nudArtistPriority.Value;
             ToolsManager.GetManager().AlbumPriority = (int)nudAlbumPriority.Value;

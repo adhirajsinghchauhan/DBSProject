@@ -25,8 +25,7 @@ namespace MusicManager
 		[DllImport("kernel32.dll")]
 		public static extern IntPtr LocalFree(IntPtr p);
 		[DllImport("user32.dll")]
-		public static extern int SendMessage(IntPtr
-			hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+		public static extern int SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
 		//Create wrappers for the memory API's similar to
 		//Marshal.AllocHGlobal and Marshal.FreeHGlobal

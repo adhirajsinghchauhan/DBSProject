@@ -10,6 +10,8 @@ using System.Reflection;
 using System.IO;
 using System.Threading;
 using ListViewSorter;
+using MySql.Data.MySqlClient;
+
 namespace MusicManager
 {
     public partial class Main : Form,IComparer<MMHistory.MusicRow>
@@ -30,7 +32,7 @@ namespace MusicManager
         private MMHistory.MusicRow drPlaying = null;
         private bool isPlaying = false;
         private MMHistory mmHistory;
-        Random randomNumberGenreator = new Random();
+        Random randomNumberGenerator = new Random();
         private double totalPlayCount=0;
         private ArrayList GenreList;
         private ArrayList artistList;
@@ -42,6 +44,10 @@ namespace MusicManager
 		private static Image play = Image.FromFile("E:/IE CSE/Studios/Resources/Icons/Material Design/png/play106.png");
 		private static Image pause = Image.FromFile("E:/IE CSE/Studios/Resources/Icons/Material Design/png/pause44.png");
 
+		MySqlConnection connection = new MySqlConnection();
+		MySqlCommand command = new MySqlCommand();
+		int count = 0;
+
 		public Main()
         {            
             InitializeComponent();
@@ -51,6 +57,9 @@ namespace MusicManager
             MusicManagerHistory = new MMHistory();
             musicList=new List<MMHistory.MusicRow>();
             playedList = new List<MMHistory.MusicRow>();
+
+			connection.ConnectionString = "server=localhost;user id=root;database=musicmanager";
+			connection.Open();
 		}
 
 		public Main(String musicLocation)
@@ -62,7 +71,7 @@ namespace MusicManager
 			MusicManagerHistory = new MMHistory();
 			musicList = new List<MMHistory.MusicRow>();
 			playedList = new List<MMHistory.MusicRow>();
-			loadButton.PerformClick();
+			//loadButton.PerformClick();
 		}
 
 		private String formatTime(int milliseconds)
@@ -72,8 +81,111 @@ namespace MusicManager
 			return String.Format("{00:00}", (float) minutes) + ":" + String.Format("{00:00}", (float) (seconds % 60));
 		}
 
+		private void getAllSongsByAlbum(String albumID)
+		{
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.Connection = connection;
+			command.CommandText = "CALL getAllSongsByAlbum(@param)";
+			MySqlParameter parameter = new MySqlParameter();
+			parameter.Value = albumID;
+			parameter.ParameterName = "@param";
+			parameter.Direction = System.Data.ParameterDirection.Input;
+			command.Parameters.Add(parameter);
+			command.ExecuteNonQueryAsync();
+		}
 
-        private void EnabledDisabledAllOperation(bool flag)
+		private void getAllSongsByArtist(String artistID)
+		{
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.Connection = connection;
+			command.CommandText = "CALL getAllSongsByArtist(@param)";
+			MySqlParameter parameter = new MySqlParameter();
+			parameter.Value = artistID;
+			parameter.ParameterName = "@param";
+			parameter.Direction = System.Data.ParameterDirection.Input;
+			command.Parameters.Add(parameter);
+			command.ExecuteNonQueryAsync();
+		}
+
+		private void allOtherMySqlCommands(string[] args)
+		{
+			string trackID = args[0];
+
+			command.CommandType = System.Data.CommandType.Text;
+			command.Connection = connection;
+			command.CommandText = "SELECT trackName, artistID, albumID" +
+				"FROM tracks" +
+				"WHERE trackID = @param";
+			command.Parameters.AddWithValue("@param", trackID);
+			command.ExecuteNonQueryAsync();
+		}
+
+		private void getSongs()
+		{
+			command.CommandType = System.Data.CommandType.Text;
+			command.Connection = connection;
+			command.CommandText = "SELECT trackName, artistID, albumID" +
+				"FROM tracks";
+			command.ExecuteNonQueryAsync();
+		}
+
+		private void getGenres()
+		{
+			command.CommandType = System.Data.CommandType.Text;
+			command.Connection = connection;
+			command.CommandText = "SELECT * FROM genre";
+			command.ExecuteNonQueryAsync();
+		}
+
+		private void getAlbums()
+		{
+			command.CommandType = System.Data.CommandType.Text;
+			command.Connection = connection;
+			command.CommandText = "SELECT * FROM album";
+			command.ExecuteNonQueryAsync();
+		}
+
+		private void getPublishers()
+		{
+			command.CommandType = System.Data.CommandType.Text;
+			command.Connection = connection;
+			command.CommandText = "SELECT * FROM publisher";
+			command.ExecuteNonQueryAsync();
+		}
+
+		private void getMoods()
+		{
+			command.CommandType = System.Data.CommandType.Text;
+			command.Connection = connection;
+			command.CommandText = "SELECT * FROM mood";
+			command.ExecuteNonQueryAsync();
+		}
+
+		private void getArtists()
+		{
+			command.CommandType = System.Data.CommandType.Text;
+			command.Connection = connection;
+			command.CommandText = "SELECT * FROM artist";
+			command.ExecuteNonQueryAsync();
+		}
+
+		private void insertIntoTracks(String name, String trackLength, int artistID, int albumID, int genreID, int moodID)
+		{
+			count++;
+			command.CommandType = System.Data.CommandType.Text;
+			command.Connection = connection;
+			command.CommandText = "INSERT INTO tracks VALUES(@param1, @param2, @param3, @param4, @param4, @param5, @param6, @param7)";
+			command.Parameters.AddWithValue("@param1", count);
+			command.Parameters.AddWithValue("@param2", name);
+			command.Parameters.AddWithValue("@param3", trackLength);
+			command.Parameters.AddWithValue("@param4", artistID);
+			command.Parameters.AddWithValue("@param5", albumID);
+			command.Parameters.AddWithValue("@param6", genreID);
+			command.Parameters.AddWithValue("@param7", moodID);
+			command.ExecuteNonQueryAsync();
+		}
+
+		private void EnabledDisabledAllOperation(bool flag)
         {
             this.loadButton.Enabled = flag;
             this.browseButton.Enabled = flag;
@@ -1018,12 +1130,6 @@ namespace MusicManager
             playedList.Clear();
             dataGridMusic.DataSource = musicList;
             FillupMusicGrid();
-            //dgMusic.DataSource = null;
-            //if(musicList!=null)
-            //    musicList.Clear();
-            ////dgMusic.Rows.Clear();
-            //dgMusic.Refresh();
-            //musicList = null;
             totalPlayCount = 0;
             mp3FileHash.Clear();
             this.numberOfSongs.Text = "0 Songs";
@@ -1086,7 +1192,7 @@ namespace MusicManager
         private void RandomPlay()
         {
 
-            double dRan = (double)(randomNumberGenreator.Next() % (int)(totalPlayCount+1));
+            double dRan = (double)(randomNumberGenerator.Next() % (int)(totalPlayCount+1));
             int index = 0;
             for (int i = 0; i < musicList.Count; i++)
             {
@@ -1250,7 +1356,6 @@ namespace MusicManager
         }
         private void ReloadListView()
         {
-            //while (preventEvent) ;
             ArrayList GenreList=new ArrayList();
             listboxGenre.Invoke(new GetSelectedListDelegate(GetSelectedGenreList), new object[] {GenreList });
             ArrayList artistList = new ArrayList();
@@ -1261,41 +1366,6 @@ namespace MusicManager
             playedList.Clear();
             totalFileSize = 0;
             totalPlayCount = 0;
-            //for (int i = 0; i < musicList.Count; i++)
-            //{
-            //    MMHistory.MusicRow dr = musicList[i];
-            //    if (dr == null)
-            //    {
-            //        continue;
-            //    }
-            //    int tempPlaycount = 0;
-            //    tempPlaycount += dr.PlayCount;
-            //    if (drPlaying != null)
-            //    {
-            //        if (dr.Genre != "" && dr.Genre == drPlaying.Genre)
-            //        {
-            //            tempPlaycount += ToolsManager.GetManager().GenrePriority + MusicManagerHistory.Music.GetAveragePlayCountByGenre(dr.Genre);
-            //        }
-            //        if (dr.Album != "" && dr.Album == drPlaying.Album)
-            //        {
-            //            tempPlaycount += ToolsManager.GetManager().AlbumPriority + MusicManagerHistory.Music.GetAveragePlayCountByAlbum(dr.Album);
-            //        }
-            //        if (dr.Artist != "" && dr.Artist == drPlaying.Artist)
-            //        {
-            //            tempPlaycount += ToolsManager.GetManager().ArtistPriority + MusicManagerHistory.Music.GetAveragePlayCountByArtist(dr.Artist);
-            //        }
-            //    }
-            //    if (ToolsManager.GetManager().AllowRepeat == false && playedList.Contains(dr))
-            //    {
-            //        dr.CumulativeProbability = 0;
-            //    }
-            //    else
-            //    {
-            //        totalPlayCount += tempPlaycount;
-            //        dr.CumulativeProbability = totalPlayCount;
-            //    }
-            //    totalFileSize += dr.Size;
-            //}
             CalculateNextProbability();
             this.Invoke(new InvokeMethodDelegate(MusicListChanged));
             
@@ -1433,14 +1503,7 @@ namespace MusicManager
         }
 
         #endregion
-
-        //private void tmrReload_Tick(object sender, EventArgs e)
-        //{
-        //    tmrReload.Enabled = false; ;
-        //    ReloadListView();
-        //}
-
-        
+		
         private void listViewFiles_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control&&e.KeyCode==Keys.A)
@@ -1490,27 +1553,6 @@ namespace MusicManager
             else if (dataGridMusic.Columns[e.ColumnIndex].Name == "MMProbability")
             {
                 MMHistory.MusicRow dr = (MMHistory.MusicRow)dataGridMusic.Rows[e.RowIndex].DataBoundItem;
-                //int mmRating = dr.PlayCount;
-                //int additionalRating = 0;
-                //if (drPlaying != null)
-                //{
-                //    if (dr.Genre != "" && dr.Genre == drPlaying.Genre)
-                //    {
-                //        additionalRating += ToolsManager.GetManager().GenrePriority + MusicManagerHistory.Music.GetAveragePlayCountByGenre(dr.Genre);
-                //    }
-                //    if (dr.Album != "" && dr.Album == drPlaying.Album)
-                //    {
-                //        additionalRating += ToolsManager.GetManager().AlbumPriority + MusicManagerHistory.Music.GetAveragePlayCountByAlbum(dr.Album);
-                //    }
-                //    if (dr.Artist != "" && dr.Artist == drPlaying.Artist)
-                //    {
-                //        additionalRating += ToolsManager.GetManager().ArtistPriority + MusicManagerHistory.Music.GetAveragePlayCountByArtist(dr.Artist);
-                //    }
-                //}
-                //if (ToolsManager.GetManager().AllowRepeat == false && playedList.Contains(dr))
-                //    mmRating = 0;
-                //else
-                //    mmRating += additionalRating;                
                 double rating = dr.MMProbability;
                 
                 if (totalPlayCount != 0)
@@ -1518,7 +1560,6 @@ namespace MusicManager
                     rating = (double)rating / (double)(totalPlayCount);
                 }
                 e.Value = rating.ToString("0.#### %");
-                //dgMusic.Rows[e.RowIndex].HeaderCell.Value = Convert.ToString(e.RowIndex + 1);
             }
             else if (dataGridMusic.Columns[e.ColumnIndex].Name == "CumulativeProbability")
             {
@@ -1563,12 +1604,13 @@ namespace MusicManager
                         break;
                 }
             }
-        }
+		}
 
         private void dgMusic_Resize(object sender, EventArgs e)
         {
             ResizeColumn();
         }
+
         private void ResizeColumn()
         {
             int total = 0;
@@ -1802,6 +1844,23 @@ namespace MusicManager
 		private void Main_FormClosed(object sender, FormClosedEventArgs e)
 		{
 			Application.Exit();
+		}
+
+		private void ToolStripMenuItem_MouseEnter(object sender, EventArgs e)
+		{
+			foreach (ToolStripMenuItem menuItem in menuStrip1.Items)
+			{
+				if (menuItem.Selected)
+					menuItem.ForeColor = Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(50)))), ((int)(((byte)(56)))));
+			}
+		}
+
+		private void ToolStripMenuItem_MouseLeave(object sender, EventArgs e)
+		{
+			foreach (ToolStripMenuItem menuItem in menuStrip1.Items)
+			{
+				menuItem.ForeColor = Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(241)))), ((int)(((byte)(254)))));
+			}
 		}
 
 		private void repeatButton_MouseLeave(object sender, EventArgs e)

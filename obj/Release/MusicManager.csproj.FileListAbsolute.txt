@@ -12,4 +12,4 @@ E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\bin\Release\Interop.Sh
 E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Release\MusicManager.Options.resources
 E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Release\MusicManager.exe
 E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Release\MusicManager.pdb
-E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\obj\Release\MusicManager.csprojResolveAssemblyReference.cache
+E:\Downloads\Compressed\Music_Manager_10_src\MusicManager\bin\Release\MySql.Data.dll
