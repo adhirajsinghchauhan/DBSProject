@@ -1,5 +1,8 @@
 # Music Manager (DBSProject)
 
+## Download
+[Click here](https://github.com/asc42/DBSProject/raw/master/bin/Release/app.publish/MusicManager.exe)
+
 ## About
 This app can play any `.wma` or `.mp3` file on a Windows system. It automatically figures out the default music folder location and loads all files into an `MMHHistory.mmh` file for faster access.
 
