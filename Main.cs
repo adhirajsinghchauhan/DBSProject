@@ -44,8 +44,8 @@ namespace MusicManager
 		private static Image play = Image.FromFile("E:/IE CSE/Studios/Resources/Icons/Material Design/png/play106.png");
 		private static Image pause = Image.FromFile("E:/IE CSE/Studios/Resources/Icons/Material Design/png/pause44.png");
 
-		MySqlConnection connection = new MySqlConnection();
-		MySqlCommand command = new MySqlCommand();
+		static MySqlConnection connection = new MySqlConnection();
+		static MySqlCommand command = new MySqlCommand();
 		int count = 0;
 
 		public Main()
@@ -169,20 +169,40 @@ namespace MusicManager
 			command.ExecuteNonQueryAsync();
 		}
 
-		private void insertIntoTracks(String name, String trackLength, int artistID, int albumID, int genreID, int moodID)
+		private void insertIntoTracks(String name)
 		{
 			count++;
-			command.CommandType = System.Data.CommandType.Text;
+			Random random = new Random(500);
 			command.Connection = connection;
-			command.CommandText = "INSERT INTO tracks VALUES(@param1, @param2, @param3, @param4, @param4, @param5, @param6, @param7)";
-			command.Parameters.AddWithValue("@param1", count);
-			command.Parameters.AddWithValue("@param2", name);
-			command.Parameters.AddWithValue("@param3", trackLength);
-			command.Parameters.AddWithValue("@param4", artistID);
-			command.Parameters.AddWithValue("@param5", albumID);
-			command.Parameters.AddWithValue("@param6", genreID);
-			command.Parameters.AddWithValue("@param7", moodID);
-			command.ExecuteNonQueryAsync();
+			for (int i = 1; i < 1000; i++)
+			{
+				count++;
+				int a = random.Next() / 100000000;
+				int b = random.Next() / 100000000;
+				int c = random.Next() / 100000000;
+				int d = random.Next() / 100000000;
+				name = dataGridMusic.Rows[i].Cells[3].GetEditedFormattedValue(i, new DataGridViewDataErrorContexts()).ToString();
+				string length = dataGridMusic.Rows[i].Cells[7].GetEditedFormattedValue(i, new DataGridViewDataErrorContexts()).ToString();
+				command.CommandText = "INSERT INTO tracks  VALUES(" + count + ", '" + name + "', length," + random + ", " + random + ", " + random + ", " + random + ")";
+			}
+			command.ExecuteNonQuery();
+		}
+
+		private void updateTracks(object sender, EventArgs e)
+		{
+			Random random = new Random();
+			for (int i = 1; i < 1000; i++)
+			{
+				count++;
+				int a = random.Next() / 100000000;
+				int b = random.Next() / 100000000;
+				int c = random.Next() / 100000000;
+				int d = random.Next() / 100000000;
+				string name = dataGridMusic.Rows[i].Cells[3].GetEditedFormattedValue(i, new DataGridViewDataErrorContexts()).ToString();
+				string length = dataGridMusic.Rows[i].Cells[7].GetEditedFormattedValue(i, new DataGridViewDataErrorContexts()).ToString();
+				string query = "UPDATE tracks SET trackLength = '" + length + "' WHERE trackID = " + count + ";";
+				Console.WriteLine(query);
+			}
 		}
 
 		private void EnabledDisabledAllOperation(bool flag)
